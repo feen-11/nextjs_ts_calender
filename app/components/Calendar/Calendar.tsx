@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import {
   addMonths,
   format,
@@ -9,8 +10,9 @@ import {
   startOfWeek,
 } from 'date-fns';
 import { generateMonth, generateWeek } from '@/app/hooks/useGenerateCalendar';
-import { useEffect, useState } from 'react';
 import CalendarWeek from './CalendarWeek';
+import AddSchedule from './schedule/AddSchedule';
+import { Schedule } from '@/app/types/shcedule';
 
 export default function Calendar() {
   const [baseDate, setBaseDate] = useState(new Date());
@@ -18,6 +20,10 @@ export default function Calendar() {
     generateMonth(baseDate)
   );
   const [viewMode, setViewMode] = useState('month');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [scheduleText, setScheduleText] = useState('');
+  const [schedules, setSchedules] = useState<Schedule[]>([]);
 
   const togglePrev = () => {
     if (viewMode === 'month') {
@@ -44,6 +50,30 @@ export default function Calendar() {
     }
   };
 
+  const handleDateClick = (date: Date) => {
+    setSelectedDate(date);
+    setIsModalOpen(true);
+    setScheduleText('');
+  };
+
+  const onChangeScheduleText = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setScheduleText(e.target.value);
+  };
+
+  const onClickAddSchedule = () => {
+    if (selectedDate) {
+      const newSchedules = [
+        ...schedules,
+        { title: scheduleText, date: selectedDate },
+      ];
+      setSchedules(newSchedules);
+    }
+    setSelectedDate(null);
+    setIsModalOpen(false);
+    setScheduleText('');
+  };
+  console.log(schedules);
+
   useEffect(() => {
     if (viewMode === 'month') {
       setCurrentCalendar(generateMonth(baseDate));
@@ -55,6 +85,12 @@ export default function Calendar() {
   return (
     <div className="p-4 h-screen flex flex-col">
       <div className="flex justify-between items-center mb-4">
+        <button
+          className="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+          onClick={() => setBaseDate(new Date())}
+        >
+          今日
+        </button>
         <button
           className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
           onClick={togglePrev}
@@ -94,6 +130,8 @@ export default function Calendar() {
                   weekIndex={weekIndex}
                   baseDate={baseDate}
                   key={weekIndex}
+                  onDateClick={handleDateClick}
+                  schedules={schedules}
                 />
               ))
             ) : (
@@ -102,11 +140,21 @@ export default function Calendar() {
                 weekIndex={0}
                 baseDate={baseDate}
                 key={0}
+                onDateClick={handleDateClick}
+                schedules={schedules}
               />
             )}
           </tbody>
         </table>
       </div>
+      {isModalOpen && selectedDate && (
+        <AddSchedule
+          date={selectedDate}
+          onClose={() => setIsModalOpen(false)}
+          onChangeScheduleText={onChangeScheduleText}
+          onClickAddSchedule={onClickAddSchedule}
+        />
+      )}
     </div>
   );
 }
