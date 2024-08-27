@@ -1,5 +1,4 @@
-import clsx from 'clsx';
-import { getDate, getDay, isSameDay, isSameMonth } from 'date-fns';
+import { getDay } from 'date-fns';
 import React from 'react';
 import CalendarDate from './CalendarDate';
 
