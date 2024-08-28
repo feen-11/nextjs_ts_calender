@@ -10,7 +10,7 @@ interface CalendarDateProps {
   schedules: Schedule[];
 }
 
-export default function CalendarDate({
+export default React.memo(function CalendarDate({
   date,
   baseDate,
   onClick,
@@ -39,4 +39,4 @@ export default function CalendarDate({
       ))}
     </td>
   );
-}
+});

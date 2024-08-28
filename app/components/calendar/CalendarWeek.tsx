@@ -11,7 +11,7 @@ interface CalendarWeekProps {
   schedules: Schedule[];
 }
 
-export default function CalendarWeek({
+export default React.memo(function CalendarWeek({
   week,
   baseDate,
   weekIndex,
@@ -31,4 +31,4 @@ export default function CalendarWeek({
       ))}
     </tr>
   );
-}
+});

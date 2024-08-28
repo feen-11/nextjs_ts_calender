@@ -1,16 +1,18 @@
 import React from 'react';
 
-export default function AddSchedule({
-  date,
-  onClose,
-  onChangeScheduleText,
-  onClickAddSchedule,
-}: {
+interface AddScheduleProps {
   date: Date;
   onClose: () => void;
   onChangeScheduleText: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onClickAddSchedule: () => void;
-}) {
+}
+
+export default React.memo(function AddSchedule({
+  date,
+  onClose,
+  onChangeScheduleText,
+  onClickAddSchedule,
+}: AddScheduleProps) {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
       <div className="bg-white p-6 rounded-lg shadow-lg w-96 relative">
@@ -40,4 +42,4 @@ export default function AddSchedule({
       </div>
     </div>
   );
-}
+});

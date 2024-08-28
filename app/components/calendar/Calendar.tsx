@@ -1,5 +1,6 @@
 'use client';
 
+import React, { useCallback } from 'react';
 import { useState, useEffect } from 'react';
 import {
   addMonths,
@@ -14,7 +15,7 @@ import CalendarWeek from './CalendarWeek';
 import AddSchedule from './schedule/AddSchedule';
 import { Schedule } from '@/app/types/shcedule';
 
-export default function Calendar() {
+export default React.memo(function Calendar() {
   const [baseDate, setBaseDate] = useState(new Date());
   const [currentCalendar, setCurrentCalendar] = useState(
     generateMonth(baseDate)
@@ -50,17 +51,20 @@ export default function Calendar() {
     }
   };
 
-  const handleDateClick = (date: Date) => {
+  const handleDateClick = useCallback((date: Date) => {
     setSelectedDate(date);
     setIsModalOpen(true);
     setScheduleText('');
-  };
+  }, []);
 
-  const onChangeScheduleText = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setScheduleText(e.target.value);
-  };
+  const onChangeScheduleText = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setScheduleText(e.target.value);
+    },
+    []
+  );
 
-  const onClickAddSchedule = () => {
+  const onClickAddSchedule = useCallback(() => {
     if (selectedDate) {
       const newSchedules = [
         ...schedules,
@@ -71,7 +75,7 @@ export default function Calendar() {
     setSelectedDate(null);
     setIsModalOpen(false);
     setScheduleText('');
-  };
+  }, [scheduleText, selectedDate, schedules]);
 
   useEffect(() => {
     if (viewMode === 'month') {
@@ -156,4 +160,4 @@ export default function Calendar() {
       )}
     </div>
   );
-}
+});
