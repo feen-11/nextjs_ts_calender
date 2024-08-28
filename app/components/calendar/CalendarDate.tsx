@@ -1,25 +1,27 @@
 import React from 'react';
 import clsx from 'clsx';
-import { getDate, getDay, isSameDay, isSameMonth } from 'date-fns';
+import { getDate, getDay, getTime, isSameDay, isSameMonth } from 'date-fns';
 import { Schedule } from '@/app/types/shcedule';
+
+interface CalendarDateProps {
+  date: Date;
+  baseDate: Date;
+  onClick: (date: Date) => void;
+  schedules: Schedule[];
+}
 
 export default function CalendarDate({
   date,
   baseDate,
   onClick,
   schedules,
-}: {
-  date: Date;
-  baseDate: Date;
-  onClick: (date: Date) => void;
-  schedules: Schedule[];
-}) {
+}: CalendarDateProps) {
   const schedulesForTheDay = schedules.filter((schedule) =>
     isSameDay(date, schedule.date)
   );
   return (
     <td
-      key={getDay(date)}
+      key={getTime(date)}
       className={clsx('border p-2 text-center align-top cursor-pointer', {
         'bg-blue-200': isSameDay(date, new Date()),
         'text-gray-400': !isSameMonth(date, baseDate),

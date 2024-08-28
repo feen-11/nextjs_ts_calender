@@ -1,7 +1,15 @@
 import React from 'react';
-import { getDay } from 'date-fns';
+import { getTime } from 'date-fns';
 import CalendarDate from './CalendarDate';
 import { Schedule } from '@/app/types/shcedule';
+
+interface CalendarWeekProps {
+  week: Date[];
+  baseDate: Date;
+  weekIndex: number;
+  onDateClick: (date: Date) => void;
+  schedules: Schedule[];
+}
 
 export default function CalendarWeek({
   week,
@@ -9,18 +17,12 @@ export default function CalendarWeek({
   weekIndex,
   onDateClick,
   schedules,
-}: {
-  week: Date[];
-  baseDate: Date;
-  weekIndex: number;
-  onDateClick: (date: Date) => void;
-  schedules: Schedule[];
-}) {
+}: CalendarWeekProps) {
   return (
     <tr key={weekIndex} className="h-1/6">
       {week.map((date: Date) => (
         <CalendarDate
-          key={getDay(date)}
+          key={getTime(date)}
           date={date}
           baseDate={baseDate}
           onClick={onDateClick}

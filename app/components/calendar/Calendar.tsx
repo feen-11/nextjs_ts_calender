@@ -72,7 +72,6 @@ export default function Calendar() {
     setIsModalOpen(false);
     setScheduleText('');
   };
-  console.log(schedules);
 
   useEffect(() => {
     if (viewMode === 'month') {
